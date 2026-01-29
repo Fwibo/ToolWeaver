@@ -51,7 +51,7 @@ python main_sim_loss.py --data_path ...    # With collaborative loss
 python generate_indices_toolweaver.py      # Generate indices
 ```
 
-### Stage 2: Generative Alignment
+#### Stage 2: Generative Alignment
 We adopt a multi-stage fine-tuning strategy, located in the `./train` folder.
 
 1.  **Vocabulary Expansion**: Unlike ToolGen which adds atomic tokens (e.g., `<<ToolName>>`), we resize the tokenizer to include code tokens (e.g., `<a_12>`, `<b2_5>`) initialized from the VAE codebook.
