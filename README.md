@@ -86,7 +86,7 @@ For detailed evaluation scripts and baselines, please refer to the [ToolGen Repo
 
 ### Citation
 
-If our work or the ToolGen framework is helpful, please kindly cite:
+If our work is helpful, please kindly cite:
 
 ```bibtex
 
