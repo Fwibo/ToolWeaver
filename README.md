@@ -89,6 +89,6 @@ For detailed evaluation scripts and baselines, please refer to the [ToolGen Repo
 If our work or the ToolGen framework is helpful, please kindly cite:
 
 ```bibtex
-[Your Citation Here]
+
 ```
 
