@@ -34,25 +34,61 @@ pip install -r requirements.txt
 
 See the "Requirements.txt Generation Guide" section below for more detailed dependency management.
 
-### Data Preparation
 
-1. **Tool embeddings**: `./data/ToolBench/toolweaver-mean-embeddings-*.npy`
-2. **Similarity matrix**: `./data/similarity_matrix.pkl` 
-3. **Query-tool pairs**: JSON files for retrieval alignment
-4. **Interaction trajectories**: Complete conversation flows for trajectory alignment
-5. **Base models**: Place pretrained LLMs in `./models/`
+### Datasets
+
+We follow the data construction pipeline of [ToolGen](https://github.com/Reason-Wang/ToolGen). Our experiments are based on the **ToolBench** dataset.
+
+The training data is processed into **ShareGPT-like format** and divided into three categories corresponding to the training stages. You can download the processed datasets from the [ToolGen HuggingFace Collection](https://huggingface.co/collections/reasonwang/toolgen-66f28e2079085526806509c2)
+
 
 ### Training
 
-#### Structured Tokenization
+#### Stage 1: Structured Tokenization
 ```bash
 cd index && bash run.sh                    # Basic training
 python main_sim_loss.py --data_path ...    # With collaborative loss
 python generate_indices_toolweaver.py      # Generate indices
 ```
 
-#### Generative Alignment
+### Stage 2: Generative Alignment
+We adopt a multi-stage fine-tuning strategy, located in the `./train` folder.
 
-The relevant code is located in the `./train` folder.
+1.  **Vocabulary Expansion**: Unlike ToolGen which adds atomic tokens (e.g., `<<ToolName>>`), we resize the tokenizer to include code tokens (e.g., `<a_12>`, `<b2_5>`) initialized from the VAE codebook.
+2.  **Retrieval Training**: Train the model to generate the correct tool codes based on user queries.
+3.  **End-to-End Agent-Tuning**: Fine-tune with full conversation trajectories to handle arguments and multi-turn interactions.
 
+A sample data entry for ToolWeaver (Memorization Stage):
+```json
+{
+    "conversations": [
+        {
+            "role": "user",
+            "content": "Tool Name: QRCheck. Description: Check quality...",
+            "loss": false
+        },
+        {
+            "role": "assistant",
+            "content": "<a_10><b_45><c_12><d_8>", 
+            "loss": true
+        }
+    ]
+}
+```
+
+### Evaluation
+
+For detailed evaluation scripts and baselines, please refer to the [ToolGen Repository](https://github.com/Reason-Wang/ToolGen).
+
+*   **Retrieval**: See `scripts/retrieval`.
+*   **Pass Rate**: Use `scripts/pass_rate` to evaluate ToolBench test sets.
+*   **Win Rate**: Use `scripts/preference` for comparisons.
+
+### Citation
+
+If our work or the ToolGen framework is helpful, please kindly cite:
+
+```bibtex
+[Your Citation Here]
+```
 
